@@ -16,13 +16,19 @@ RUN apt-get update && \
   
 WORKDIR /opt/app
 
+COPY Gemfile Gemfile.lock ./
+COPY mix.* ./
+COPY package.json package-lock.json ./
+
 COPY . .
 
 # Ruby deps
+
 RUN gem install bundler --conservative
 RUN bundle install
 
 # Elixir deps
+
 RUN mix local.hex --force
 RUN mix deps.get
 
@@ -39,4 +45,4 @@ EXPOSE 3000
 ENV PORT="3000"
 
 # Start the main process.
-CMD ["bundle", "exec", "puma", "-t", "5:5:", "-p", "${PORT:-3000}", "-e", "${RACK_ENV:-development}"]
+CMD ["bundle", "exec", "puma", "-t", "5:5:", "-p", "3000", "-e", "${RACK_ENV:-development}"]

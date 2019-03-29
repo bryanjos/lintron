@@ -1,23 +1,23 @@
 sudo: required
 language: ruby
-rvm: 2.3.3
+rvm: 2.3.8
 addons:
   postgresql: '10'
   apt:
     packages:
-    - postgresql-10
-    - postgresql-client-10
+      - postgresql-10
+      - postgresql-client-10
 env:
   global:
-  - PGPORT=5433
+    - PGPORT=5433
 services:
-- postgresql
+  - postgresql
 install:
-- rvm use 2.3.3 --install
+  - rvm use 2.3.8 --install
 before_script:
-- RAILS_ENV=test bin/setup
+  - RAILS_ENV=test bin/setup
 script:
-- RAILS_ENV=test bin/test
+  - RAILS_ENV=test bin/test
 deploy:
   provider: hephy
   controller: https://deis.prod.revelry.net
@@ -29,6 +29,6 @@ deploy:
   on:
     branch: master
 after_deploy:
-- ./deis run "rake db:migrate" -a lintron
+  - ./deis run "bundle exec rake db:migrate" -a lintron
 git:
   depth: false
